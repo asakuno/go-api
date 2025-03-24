@@ -4,6 +4,7 @@ import (
 	"log"
 	"os"
 
+	"github.com/asakuno/go-api/command"
 	"github.com/asakuno/go-api/config"
 	"github.com/asakuno/go-api/constants"
 	"github.com/asakuno/go-api/middleware"
@@ -23,6 +24,15 @@ func init() {
 	}
 }
 
+func args(injector *do.Injector) bool {
+	if len(os.Args) > 1 {
+		flag := command.Commands(injector)
+		return flag
+	}
+
+	return true
+}
+
 func main() {
 	var (
 		injector = do.New()
@@ -31,6 +41,10 @@ func main() {
 	do.ProvideNamed(injector, constants.DB, func(i *do.Injector) (*gorm.DB, error) {
 		return config.SetUpDatabaseConnection(), nil
 	})
+
+	if !args(injector) {
+		return
+	}
 
 	server := gin.Default()
 	server.Use(middleware.CORSMiddleware())
