@@ -1,0 +1,49 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: ./docker/Dockerfile
+    container_name: ${APP_NAME:-go-api}-app
+    volumes:
+      - .:/app
+    ports:
+      - ${GOLANG_PORT:-8888}:8888
+    networks:
+      - app-network
+
+  nginx:
+    image: nginx:latest
+    container_name: ${APP_NAME:-go-api}-nginx
+    ports:
+      - ${NGINX_PORT:-81}:80
+    volumes:
+      - .:/var/www/html
+      - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - app
+    networks:
+      - app-network
+
+  mysql:
+    hostname: mysql
+    container_name: ${APP_NAME:-go-api}-db
+    image: mysql:8.0
+    platform: linux/x86_64
+    ports:
+      - ${DB_PORT}:3306
+    volumes:
+      - ./docker/mysql/tmp:/var/lib/mysql
+      - app-data:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=${DB_PASS}
+      - MYSQL_DATABASE=${DB_NAME}
+    networks:
+      - app-network
+    command: --default-authentication-plugin=mysql_native_password
+
+volumes:
+  app-data:
+
+networks:
+  app-network:
+    driver: bridge
