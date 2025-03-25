@@ -5,9 +5,33 @@ on:
     branches:
       - '**'
 
-jobs: 
+jobs:
   build:
     runs-on: ubuntu-latest
+
+    services:
+      mysql:
+        image: mysql:8.0
+        ports:
+          - 3306:3306
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: test_go_api
+          MYSQL_USER: root
+          MYSQL_PASSWORD: password
+        options: >-
+          --health-cmd="mysqladmin ping"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=3
+
+    env:
+      APP_ENV: testing
+      DB_HOST: 127.0.0.1
+      DB_USER: root
+      DB_PASS: password
+      DB_NAME: test_go_api
+      DB_PORT: 3306
     steps:
     - uses: actions/checkout@v4
 
@@ -18,3 +42,9 @@ jobs:
 
     - name: Build
       run: go mod tidy && go build -v ./...
+
+    - name: Run database migrations
+      run: go run main.go --migrate
+
+    - name: Run tests
+      run: go test -v ./tests/...
