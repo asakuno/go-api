@@ -4,10 +4,8 @@ import (
 	"encoding/json"
 	"net/http"
 	"net/http/httptest"
-	"os"
 	"testing"
 
-	"github.com/asakuno/go-api/config"
 	"github.com/asakuno/go-api/controller"
 	"github.com/asakuno/go-api/database/factory"
 	"github.com/asakuno/go-api/dto/response"
@@ -23,15 +21,6 @@ import (
 const (
 	ROUTE_NAME = "/api/v1/users"
 )
-
-func SetUpDBEnvForTest() {
-	os.Setenv("DB_HOST", "mysql")
-	os.Setenv("DB_USER", "root")
-	os.Setenv("DB_PASS", "password")
-	os.Setenv("DB_NAME", "go_api")
-	os.Setenv("DB_PORT", "3306")
-	os.Setenv("APP_ENV", "test")
-}
 
 func SetUpRoutes() *gin.Engine {
 	route := gin.Default()
@@ -50,7 +39,7 @@ func SetUpUserController() controller.UserController {
 }
 
 func InsertTestUser() ([]entity.User, error) {
-	db := config.SetUpDatabaseConnection()
+	db := tests.SetUpDatabaseConnection()
 	userFactory := factory.NewUserFactory()
 
 	users, err := userFactory.CreateAndSave(db)
@@ -62,12 +51,11 @@ func InsertTestUser() ([]entity.User, error) {
 }
 
 func CleanUpTestData() {
-	db := config.SetUpDatabaseConnection()
+	db := tests.SetUpDatabaseConnection()
 	db.Exec("DELETE FROM users")
 }
 
 func Test_GetAllUser_OK(t *testing.T) {
-	SetUpDBEnvForTest()
 	defer CleanUpTestData()
 
 	route := SetUpRoutes()
@@ -120,7 +108,6 @@ func Test_GetAllUser_OK(t *testing.T) {
 }
 
 func Test_GetAllUser_EmptyResult(t *testing.T) {
-	SetUpDBEnvForTest()
 	defer CleanUpTestData()
 
 	route := SetUpRoutes()
