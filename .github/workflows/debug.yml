@@ -41,9 +41,6 @@ jobs:
     - name: Copy .env.example to .env
       run: test -f .env || cp .env.example .env
 
-    - name: Update hosts file
-      run: echo "127.0.0.1 mysql" | sudo tee -a /etc/hosts
-
     - name: Build
       run: go mod tidy && go build -v ./...
 
