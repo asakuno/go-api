@@ -3,8 +3,7 @@ package controller
 import (
 	"net/http"
 
-	"github.com/asakuno/go-api/dto/response"
-	"github.com/asakuno/go-api/repository"
+	user_usecase "github.com/asakuno/go-api/usecase/user"
 	"github.com/asakuno/go-api/utils"
 	"github.com/gin-gonic/gin"
 )
@@ -16,13 +15,13 @@ type (
 	}
 
 	userController struct {
-		userRepository repository.UserRepository
+		getUserUsecase user_usecase.GetUserUsecase
 	}
 )
 
-func NewUserController(userRepo repository.UserRepository) UserController {
+func NewUserController(getUserUsecase user_usecase.GetUserUsecase) UserController {
 	return &userController{
-		userRepository: userRepo,
+		getUserUsecase: getUserUsecase,
 	}
 }
 
@@ -34,7 +33,7 @@ func (uc *userController) Register(ctx *gin.Context) {
 }
 
 func (uc *userController) GetAllUser(ctx *gin.Context) {
-	users, err := uc.userRepository.GetAllUser(ctx.Request.Context(), nil)
+	result, err := uc.getUserUsecase.Execute(ctx.Request.Context())
 
 	if err != nil {
 		res := utils.BuildResponseFailed("エラーが発生しました", err.Error(), nil)
@@ -42,23 +41,10 @@ func (uc *userController) GetAllUser(ctx *gin.Context) {
 		return
 	}
 
-	var userResponses []response.UserResponse
-	for _, user := range users {
-		userResponses = append(userResponses, response.UserResponse{
-			ID:      user.ID,
-			LoginId: user.LoginId,
-		})
-	}
-
-	resData := response.GetAllUserResponse{
-		Users: userResponses,
-		Count: len(users),
-	}
-
 	res := utils.Response{
 		Status:  true,
 		Message: "",
-		Data:    resData,
+		Data:    result,
 	}
 	ctx.JSON(http.StatusOK, res)
 }
