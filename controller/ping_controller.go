@@ -7,9 +7,9 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func Ping(c *gin.Context) {
+func Ping(ctx *gin.Context) {
 	res := utils.BuildResponseSuccess("Ping successfully", gin.H{
 		"message": "ok",
 	})
-	c.JSON(http.StatusOK, res)
+	ctx.JSON(http.StatusOK, res)
 }

@@ -15,4 +15,5 @@ func InitDatabase(injector *do.Injector) {
 
 func RegisterDependencies(injector *do.Injector) {
 	InitDatabase(injector)
+	ProvideDependencies(injector)
 }

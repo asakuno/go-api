@@ -5,14 +5,13 @@ import (
 	"os"
 
 	"github.com/asakuno/go-api/command"
-	"github.com/asakuno/go-api/config"
 	"github.com/asakuno/go-api/constants"
 	"github.com/asakuno/go-api/middleware"
+	"github.com/asakuno/go-api/provider"
 	"github.com/asakuno/go-api/routes"
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
 	"github.com/samber/do"
-	"gorm.io/gorm"
 )
 
 func init() {
@@ -37,10 +36,7 @@ func main() {
 	var (
 		injector = do.New()
 	)
-
-	do.ProvideNamed(injector, constants.DB, func(i *do.Injector) (*gorm.DB, error) {
-		return config.SetUpDatabaseConnection(), nil
-	})
+	provider.RegisterDependencies(injector)
 
 	if !args(injector) {
 		return

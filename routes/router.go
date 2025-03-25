@@ -7,4 +7,5 @@ import (
 
 func RegisterRoutes(server *gin.Engine, injector *do.Injector) {
 	Ping(server, injector)
+	User(server, injector)
 }

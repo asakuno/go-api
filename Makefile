@@ -21,6 +21,9 @@ down:
 logs:
 	docker-compose logs -f
 
+log-app:
+	docker compose logs -f app
+
 # MySQL commands
 container-mysql:
 	docker exec -it ${MYSQL_CONTAINER_NAME} /bin/sh
