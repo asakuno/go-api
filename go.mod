@@ -3,6 +3,7 @@ module github.com/asakuno/go-api
 go 1.24.1
 
 require (
+	github.com/brianvoe/gofakeit/v7 v7.2.1
 	github.com/gin-gonic/gin v1.10.0
 	github.com/google/uuid v1.6.0
 	github.com/joho/godotenv v1.5.1
