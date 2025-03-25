@@ -38,11 +38,8 @@ jobs:
       with:
         go-version: 1.24.1
 
-    - name: Wait for MySQL
-      run: |
-        echo "Waiting for MySQL to start..."
-        timeout 30s bash -c 'until mysqladmin ping -h 127.0.0.1 -uroot -proot --silent; do sleep 1; done'
-        echo "MySQL is up and running!"
+    - name: Copy .env.example to .env
+      run: test -f .env || cp .env.example .env
 
     - name: Build
       run: go mod tidy && go build -v ./...
