@@ -6,6 +6,7 @@ import (
 
 	"github.com/asakuno/go-api/constants"
 	"github.com/asakuno/go-api/database/migrations"
+	"github.com/asakuno/go-api/database"
 	"github.com/samber/do"
 	"gorm.io/gorm"
 )
@@ -14,11 +15,15 @@ func Commands(injector *do.Injector) bool {
 	db := do.MustInvokeNamed[*gorm.DB](injector, constants.DB)
 
 	migrate := false
+	seed := false
 	run := false
 
 	for _, arg := range os.Args[1:] {
 		if arg == "--migrate" {
 			migrate = true
+		}
+		if arg == "--seed" {
+			seed = true 
 		}
 		if arg == "--run" {
 			run = true
@@ -30,6 +35,13 @@ func Commands(injector *do.Injector) bool {
 			log.Fatalf("error migration: %v", err)
 		}
 		log.Println("migration success")
+	}
+
+	if seed {
+		if err := database.Seed(db); err != nil {
+			log.Fatalf("error seeding: %v", err)
+		}
+		log.Println("seed success")
 	}
 
 	if run {
