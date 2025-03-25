@@ -8,7 +8,7 @@ import (
 
 func User(route *gin.Engine, injector *do.Injector) {
 	userController := do.MustInvoke[controller.UserController](injector)
-	routes := route.Group("/api/v1/user")
+	routes := route.Group("/api/v1/users")
 
 	{
 		routes.GET("", userController.GetAllUser)
