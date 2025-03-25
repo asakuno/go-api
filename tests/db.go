@@ -30,7 +30,7 @@ func SetUpDatabaseConnection() *gorm.DB {
 	dbUser = getenv("DB_USER")
 	dbPass = getenv("DB_PASS")
 	dbHost = getenv("DB_HOST")
-	dbName = getenv("DB_NAME")
+	dbName = "test_go_api"
 	dbPort = getenv("DB_PORT")
 
 	dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8mb4&parseTime=True&loc=Local", dbUser, dbPass, dbHost, dbPort, dbName)
