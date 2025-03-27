@@ -31,7 +31,7 @@ func (ur *userRepository) GetAllUser(ctx context.Context, tx *gorm.DB) ([]entity
 	var users []entity.User
 
 	query := tx.WithContext(ctx).Model(&entity.User{})
-	if err := query.Find(&users).Error; err != nil {
+	if err := query.Order("role").Find(&users).Error; err != nil {
 		return users, err
 	}
 

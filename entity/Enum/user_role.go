@@ -8,7 +8,7 @@ const (
 	RoleModerator UserRole = 2
 )
 
-func (r UserRole) String() string {
+func (r UserRole) GetLabel() string {
 	switch r {
 	case RoleAdmin:
 		return "admin"

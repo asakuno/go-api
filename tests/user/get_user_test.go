@@ -31,7 +31,7 @@ func SetUpUserController() controller.UserController {
 	var (
 		db             = tests.SetUpDatabaseConnection()
 		userRepo       = repository.NewUserRepository(db)
-		getUserUsecase = user_usecase.NewUserUsecase(userRepo)
+		getUserUsecase = user_usecase.NewGetUserUsecase(userRepo)
 		userController = controller.NewUserController(getUserUsecase)
 	)
 

@@ -15,7 +15,7 @@ func ProvideDependencies(injector *do.Injector) {
 	userRepository := repository.NewUserRepository(db)
 
 	// usecase層
-	getUserUsecase := user_usecase.NewUserUsecase(userRepository)
+	getUserUsecase := user_usecase.NewGetUserUsecase(userRepository)
 
 	// controller層
 	do.Provide(injector, func(i *do.Injector) (controller.UserController, error) {
