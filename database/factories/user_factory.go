@@ -1,15 +1,14 @@
-package factory
+package factories
 
 import (
 	"fmt"
 	"time"
 
+	"github.com/asakuno/go-api/entities"
 	"github.com/brianvoe/gofakeit/v7"
 	"github.com/google/uuid"
 	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
-
-	"github.com/asakuno/go-api/entity"
 )
 
 type UserFactory struct {
@@ -27,7 +26,7 @@ func NewUserFactory() *UserFactory {
 	}
 }
 
-func (f *UserFactory) create() ([]entity.User, error) {
+func (f *UserFactory) create() ([]entities.User, error) {
 	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(f.Password), bcrypt.DefaultCost)
 	if err != nil {
 		return nil, fmt.Errorf("failed to hash password: %w", err)
@@ -35,19 +34,19 @@ func (f *UserFactory) create() ([]entity.User, error) {
 
 	gofakeit.Seed(time.Now().UnixNano())
 
-	users := make([]entity.User, f.Count)
+	users := make([]entities.User, f.Count)
 
 	for i := 0; i < f.Count; i++ {
 		role := f.DefaultRole
 
-		users[i] = entity.User{
+		users[i] = entities.User{
 			ID:         uuid.New(),
 			LoginId:    fmt.Sprintf("user%d", i+1),
 			Email:      gofakeit.Email(),
 			Password:   string(hashedPassword),
 			Role:       role,
 			IsVerified: true,
-			Timestamp: entity.Timestamp{
+			Timestamp: entities.Timestamp{
 				CreatedAt: time.Now(),
 				UpdatedAt: time.Now(),
 			},
@@ -57,7 +56,7 @@ func (f *UserFactory) create() ([]entity.User, error) {
 	return users, nil
 }
 
-func (f *UserFactory) CreateAndSave(db *gorm.DB) ([]entity.User, error) {
+func (f *UserFactory) CreateAndSave(db *gorm.DB) ([]entities.User, error) {
 	users, err := f.create()
 	if err != nil {
 		return nil, err

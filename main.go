@@ -6,8 +6,8 @@ import (
 
 	"github.com/asakuno/go-api/command"
 	"github.com/asakuno/go-api/constants"
-	"github.com/asakuno/go-api/middleware"
-	"github.com/asakuno/go-api/provider"
+	"github.com/asakuno/go-api/middlewares"
+	"github.com/asakuno/go-api/providers"
 	"github.com/asakuno/go-api/routes"
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
@@ -36,14 +36,14 @@ func main() {
 	var (
 		injector = do.New()
 	)
-	provider.RegisterDependencies(injector)
+	providers.RegisterDependencies(injector)
 
 	if !args(injector) {
 		return
 	}
 
 	server := gin.Default()
-	server.Use(middleware.CORSMiddleware())
+	server.Use(middlewares.CORSMiddleware())
 
 	routes.RegisterRoutes(server, injector)
 

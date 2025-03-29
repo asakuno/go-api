@@ -5,7 +5,7 @@ import (
 	"testing"
 
 	"github.com/asakuno/go-api/config"
-	"github.com/asakuno/go-api/entity"
+	"github.com/asakuno/go-api/entities"
 	"github.com/stretchr/testify/assert"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
@@ -39,7 +39,7 @@ func SetUpDatabaseConnection() *gorm.DB {
 		panic(err)
 	}
 
-	db.AutoMigrate(&entity.User{})
+	db.AutoMigrate(&entities.User{})
 
 	return db
 }

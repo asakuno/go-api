@@ -1,7 +1,7 @@
 package routes
 
 import (
-	"github.com/asakuno/go-api/controller"
+	"github.com/asakuno/go-api/controllers"
 	"github.com/gin-gonic/gin"
 	"github.com/samber/do"
 )
@@ -9,6 +9,6 @@ import (
 func Ping(route *gin.Engine, injector *do.Injector) {
 	routes := route.Group("/pings")
 	{
-		routes.GET("", controller.Ping)
+		routes.GET("", controllers.Ping)
 	}
 }
