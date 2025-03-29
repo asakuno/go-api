@@ -2,7 +2,8 @@ package seeders
 
 import (
 	"fmt"
-	"github.com/asakuno/go-api/entity"
+
+	"github.com/asakuno/go-api/entities"
 	"github.com/brianvoe/gofakeit/v7"
 	"github.com/google/uuid"
 	"golang.org/x/crypto/bcrypt"
@@ -13,7 +14,7 @@ func ListUserSeeder(db *gorm.DB) error {
 	gofakeit.Seed(0)
 	userCount := 10
 
-	users := make([]entity.User, userCount)
+	users := make([]entities.User, userCount)
 
 	password := "password"
 	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
@@ -24,11 +25,11 @@ func ListUserSeeder(db *gorm.DB) error {
 
 	for i := 0; i < userCount; i++ {
 		role := uint8(1)
-		if i < 5  {
+		if i < 5 {
 			role = uint8(2)
 		}
 
-		users[i] = entity.User {
+		users[i] = entities.User{
 			ID:         uuid.New(),
 			LoginId:    fmt.Sprintf("user%d", i+1),
 			Email:      gofakeit.Email(),
@@ -37,7 +38,7 @@ func ListUserSeeder(db *gorm.DB) error {
 			IsVerified: true,
 		}
 	}
-	
+
 	result := db.Create(&users)
 	return result.Error
 }

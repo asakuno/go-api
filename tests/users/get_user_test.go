@@ -1,4 +1,4 @@
-package user_test
+package users_test
 
 import (
 	"encoding/json"
@@ -6,13 +6,14 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"github.com/asakuno/go-api/controller"
-	"github.com/asakuno/go-api/database/factory"
+	"github.com/asakuno/go-api/controllers"
+	"github.com/asakuno/go-api/database/factories"
 	"github.com/asakuno/go-api/dto/response"
-	"github.com/asakuno/go-api/entity"
-	"github.com/asakuno/go-api/repository"
+	"github.com/asakuno/go-api/entities"
+	"github.com/asakuno/go-api/repositories"
+
 	"github.com/asakuno/go-api/tests"
-	user_usecase "github.com/asakuno/go-api/usecase/user"
+	user_usecase "github.com/asakuno/go-api/usecases/user"
 	"github.com/asakuno/go-api/utils"
 	"github.com/gin-gonic/gin"
 	"github.com/stretchr/testify/assert"
@@ -27,20 +28,20 @@ func SetUpRoutes() *gin.Engine {
 	return route
 }
 
-func SetUpUserController() controller.UserController {
+func SetUpUserController() controllers.UserController {
 	var (
 		db             = tests.SetUpDatabaseConnection()
-		userRepo       = repository.NewUserRepository(db)
+		userRepo       = repositories.NewUserRepository(db)
 		getUserUsecase = user_usecase.NewGetUserUsecase(userRepo)
-		userController = controller.NewUserController(getUserUsecase)
+		userController = controllers.NewUserController(getUserUsecase)
 	)
 
 	return userController
 }
 
-func InsertTestUser() ([]entity.User, error) {
+func InsertTestUser() ([]entities.User, error) {
 	db := tests.SetUpDatabaseConnection()
-	userFactory := factory.NewUserFactory()
+	userFactory := factories.NewUserFactory()
 
 	users, err := userFactory.CreateAndSave(db)
 	if err != nil {

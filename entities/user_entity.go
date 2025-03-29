@@ -1,4 +1,4 @@
-package entity
+package entities
 
 import (
 	"github.com/google/uuid"
@@ -11,7 +11,7 @@ type User struct {
 	LoginId    string    `gorm:"type:varchar(255);uniqueIndex;not null"`
 	Email      string    `gorm:"type:varchar(255);uniqueIndex;not null"`
 	Password   string    `gorm:"type:varchar(255);not null"`
-	Role       uint8     `gorm:"gorm:"type:tinyint;not null;default:1"`
+	Role       uint8     `gorm:"type:tinyint;not null;default:1"`
 	IsVerified bool      `gorm:"not null;default:false"`
 	Timestamp
 }
