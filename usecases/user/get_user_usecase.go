@@ -4,7 +4,8 @@ import (
 	"context"
 
 	"github.com/asakuno/go-api/dto/response"
-	"github.com/asakuno/go-api/repository"
+	"github.com/asakuno/go-api/entities/enums"
+	"github.com/asakuno/go-api/repositories"
 )
 
 type (
@@ -13,11 +14,11 @@ type (
 	}
 
 	getUserUsecase struct {
-		userRepository repository.UserRepository
+		userRepository repositories.UserRepository
 	}
 )
 
-func NewUserUsecase(userRepo repository.UserRepository) GetUserUsecase {
+func NewGetUserUsecase(userRepo repositories.UserRepository) GetUserUsecase {
 	return &getUserUsecase{
 		userRepository: userRepo,
 	}
@@ -32,8 +33,9 @@ func (guu *getUserUsecase) Execute(ctx context.Context) (response.GetAllUserResp
 	var userResponses []response.UserResponse
 	for _, user := range users {
 		userResponses = append(userResponses, response.UserResponse{
-			ID:      user.ID,
-			LoginId: user.LoginId,
+			ID:       user.ID,
+			LoginId:  user.LoginId,
+			UserRole: enums.UserRole(user.Role).GetLabel(),
 		})
 	}
 

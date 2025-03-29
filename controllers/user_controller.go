@@ -1,9 +1,9 @@
-package controller
+package controllers
 
 import (
 	"net/http"
 
-	user_usecase "github.com/asakuno/go-api/usecase/user"
+	user_usecase "github.com/asakuno/go-api/usecases/user"
 	"github.com/asakuno/go-api/utils"
 	"github.com/gin-gonic/gin"
 )

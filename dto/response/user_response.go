@@ -4,8 +4,9 @@ import "github.com/google/uuid"
 
 type (
 	UserResponse struct {
-		ID      uuid.UUID `json:"id"`
-		LoginId string    `json:"login_id"`
+		ID       uuid.UUID `json:"id"`
+		LoginId  string    `json:"login_id"`
+		UserRole string    `json:"user_role"`
 	}
 
 	GetAllUserResponse struct {
