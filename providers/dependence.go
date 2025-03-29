@@ -4,6 +4,7 @@ import (
 	"github.com/asakuno/go-api/constants"
 	"github.com/asakuno/go-api/controllers"
 	"github.com/asakuno/go-api/repositories"
+	"github.com/asakuno/go-api/utils"
 
 	user_usecase "github.com/asakuno/go-api/usecases/user"
 	"github.com/samber/do"
@@ -12,6 +13,7 @@ import (
 
 func ProvideDependencies(injector *do.Injector) {
 	db := do.MustInvokeNamed[*gorm.DB](injector, constants.DB)
+	validate := utils.GetValidator()
 	// repository層
 	userRepository := repositories.NewUserRepository(db)
 
@@ -20,6 +22,6 @@ func ProvideDependencies(injector *do.Injector) {
 
 	// controller層
 	do.Provide(injector, func(i *do.Injector) (controllers.UserController, error) {
-		return controllers.NewUserController(getUserUsecase), nil
+		return controllers.NewUserController(getUserUsecase, validate), nil
 	})
 }
