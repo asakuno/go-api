@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/asakuno/go-api/dto/request"
@@ -17,22 +18,24 @@ type (
 	}
 
 	userController struct {
-		getUserUsecase user_usecase.GetUserUsecase
-		validate       *validator.Validate
+		getUserUsecase  user_usecase.GetUserUsecase
+		registerUsecase user_usecase.RegisterUsecase
+		validate        *validator.Validate
 	}
 )
 
-func NewUserController(getUserUsecase user_usecase.GetUserUsecase, validate *validator.Validate) UserController {
+func NewUserController(getUserUsecase user_usecase.GetUserUsecase, registerUsecase user_usecase.RegisterUsecase, validate *validator.Validate) UserController {
 	return &userController{
-		getUserUsecase: getUserUsecase,
-		validate:       validate,
+		getUserUsecase:  getUserUsecase,
+		registerUsecase: registerUsecase,
+		validate:        validate,
 	}
 }
 
 func (uc *userController) Register(ctx *gin.Context) {
 	var request request.CreateUserRequest
 
-	err := ctx.ShouldBindJSON(&request)
+	err := ctx.ShouldBind(&request)
 	if err != nil {
 		res := utils.BuildResponseFailed("リクエスト形式が正しくありません", err.Error(), nil)
 		ctx.JSON(http.StatusBadRequest, res)
@@ -47,8 +50,16 @@ func (uc *userController) Register(ctx *gin.Context) {
 	}
 
 	// TODO: Usecaseあとで追加
+	user, err := uc.registerUsecase.Execute(ctx.Request.Context(), request)
+	if err != nil {
+		res := utils.BuildResponseFailed("エラーが発生しました", err.Error(), nil)
+		ctx.JSON(http.StatusBadRequest, res)
+		return
+	}
+
+	fmt.Println(user)
 	res := utils.BuildResponseSuccess("ユーザーが正常に登録されました", gin.H{
-		"login_id": request.LoginId,
+		"login_id": user.LoginId,
 	})
 	ctx.JSON(http.StatusCreated, res)
 }

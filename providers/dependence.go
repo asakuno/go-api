@@ -19,9 +19,10 @@ func ProvideDependencies(injector *do.Injector) {
 
 	// usecase層
 	getUserUsecase := user_usecase.NewGetUserUsecase(userRepository)
+	registerUsecase := user_usecase.NewRegisterUsecase(userRepository)
 
 	// controller層
 	do.Provide(injector, func(i *do.Injector) (controllers.UserController, error) {
-		return controllers.NewUserController(getUserUsecase, validate), nil
+		return controllers.NewUserController(getUserUsecase, registerUsecase, validate), nil
 	})
 }
