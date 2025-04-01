@@ -27,5 +27,10 @@ func NewRegisterUsecase(userRepo repositories.UserRepository) RegisterUsecase {
 func (ru *registerUsecase) Execute(ctx context.Context, req request.CreateUserRequest) (entities.User, error) {
 	user := req.ToEntity()
 
-	return user, nil
+	createdUser, err := ru.userRepository.Register(ctx, nil, user)
+	if err != nil {
+		return entities.User{}, err
+	}
+
+	return createdUser, nil
 }

@@ -10,6 +10,7 @@ import (
 type (
 	UserRepository interface {
 		GetAllUser(ctx context.Context, tx *gorm.DB) ([]entities.User, error)
+		Register(ctx context.Context, tx *gorm.DB, user entities.User) (entities.User, error)
 	}
 
 	userRepository struct {
@@ -21,6 +22,20 @@ func NewUserRepository(db *gorm.DB) UserRepository {
 	return &userRepository{
 		db: db,
 	}
+}
+
+func (ur *userRepository) Register(ctx context.Context, tx *gorm.DB, user entities.User) (entities.User, error) {
+	if tx == nil {
+		tx = ur.db
+	}
+
+	result := tx.WithContext(ctx).Create(&user)
+	if result.Error != nil {
+		return entities.User{}, result.Error
+	}
+
+	return user, nil
+
 }
 
 func (ur *userRepository) GetAllUser(ctx context.Context, tx *gorm.DB) ([]entities.User, error) {
