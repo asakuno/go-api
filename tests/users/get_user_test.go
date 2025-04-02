@@ -30,11 +30,12 @@ func SetUpRoutes() *gin.Engine {
 
 func SetUpUserController() controllers.UserController {
 	var (
-		validate       = utils.GetValidator()
-		db             = tests.SetUpDatabaseConnection()
-		userRepo       = repositories.NewUserRepository(db)
-		getUserUsecase = user_usecase.NewGetUserUsecase(userRepo)
-		userController = controllers.NewUserController(getUserUsecase, validate)
+		validate        = utils.GetValidator()
+		db              = tests.SetUpDatabaseConnection()
+		userRepo        = repositories.NewUserRepository(db)
+		getUserUsecase  = user_usecase.NewGetUserUsecase(userRepo)
+		registerUsecase = user_usecase.NewRegisterUsecase(userRepo)
+		userController  = controllers.NewUserController(getUserUsecase, registerUsecase, validate)
 	)
 
 	return userController
