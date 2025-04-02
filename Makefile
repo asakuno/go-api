@@ -31,6 +31,9 @@ container-mysql:
 create-db:
 	docker exec -it ${MYSQL_CONTAINER_NAME} /bin/sh -c "mysql -u${DB_USER} -p${DB_PASS} -e 'CREATE DATABASE IF NOT EXISTS ${DB_NAME}'"
 
+drop-db:
+	docker exec -it ${MYSQL_CONTAINER_NAME} /bin/sh -c "mysql -u${DB_USER} -p${DB_PASS} -e 'DROP DATABASE  IF EXISTS ${DB_NAME}'"
+
 # Docker commands
 container-go:
 	docker exec -it ${CONTAINER_NAME} /bin/sh

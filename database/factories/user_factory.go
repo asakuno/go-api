@@ -5,8 +5,8 @@ import (
 	"time"
 
 	"github.com/asakuno/go-api/entities"
+	"github.com/asakuno/go-api/entities/custom_types"
 	"github.com/brianvoe/gofakeit/v7"
-	"github.com/google/uuid"
 	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
 )
@@ -40,7 +40,7 @@ func (f *UserFactory) create() ([]entities.User, error) {
 		role := f.DefaultRole
 
 		users[i] = entities.User{
-			ID:         uuid.New(),
+			ID:         custom_types.NewUUID[entities.User](),
 			LoginId:    fmt.Sprintf("user%d", i+1),
 			Email:      gofakeit.Email(),
 			Password:   string(hashedPassword),
