@@ -41,6 +41,13 @@ services:
       - app-network
     command: --default-authentication-plugin=mysql_native_password
 
+  motoserver:
+    image: motoserver/moto:latest
+    ports:
+    - "4000:4000"
+    environment:
+    - MOTO_PORT=4000
+
 volumes:
   app-data:
 
